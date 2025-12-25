@@ -1,0 +1,50 @@
+## Ignore Visual Studio temporary files, build results, and user-specific files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+
+## Build results
+bin/
+obj/
+Debug/
+Release/
+
+## Visual Studio Code settings
+.vscode/
+
+## Rider IDE settings
+.idea/
+
+## ASP.NET Core files
+wwwroot/node_modules/
+appsettings.*.json
+secrets.json
+
+## Publish output
+publish/
+*.publish.xml
+
+## NuGet
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+
+## Logs
+*.log
+logs/
+
+## OS generated files
+.DS_Store
+Thumbs.db
+
+## Entity Framework
+*.db
+*.sqlite
+
+## Others
+*.vsix
+*.pdb
