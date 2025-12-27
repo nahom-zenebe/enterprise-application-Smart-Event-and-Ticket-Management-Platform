@@ -1,6 +1,3 @@
-
-
-
 public class RegisterUserCommandHandler{
     private readonly IUserRepository _repository;
 

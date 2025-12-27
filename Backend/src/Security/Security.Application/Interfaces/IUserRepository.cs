@@ -1,8 +1,17 @@
+public class IUserRepository
+{
+    public Task Register(User user)
+    {
+        throw new System.NotImplementedException();
+    }
 
+    public Task<User> GetUserbyId(int id)
+    {
+        throw new System.NotImplementedException();
+    }
 
-public class IUserRepository{
-    Task Register(User user);
-    Task <User>GetUserbyId(int id);
-    Task Login(User user);
-
+    public Task Login(User user)
+    {
+        throw new System.NotImplementedException();
+    }
 }

@@ -1,4 +1,3 @@
-
 public class SecurityDbContext : DbContext
 {
     public DbSet<User> Users { get; set; }

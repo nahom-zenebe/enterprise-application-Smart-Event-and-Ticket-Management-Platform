@@ -1,5 +1,3 @@
-
-
 public class LoginUserCommandHandler{
 
     private readonly IUserRepository _repository;
@@ -10,10 +8,7 @@ public class LoginUserCommandHandler{
 
    }
 
-   public async Task<Guid>handle(LoginUserCommand command){
+   public async Task<Guid> handle(LoginUserCommand command){
     //implmenting the login
    }
-
-
-
 }
