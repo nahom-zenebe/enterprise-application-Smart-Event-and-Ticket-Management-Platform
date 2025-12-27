@@ -1,0 +1,77 @@
+.review-publish {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.review-section,
+.publish-options {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.review-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.review-item {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  background: #f9fafb;
+  border-radius: 8px;
+}
+
+.review-label {
+  font-weight: 500;
+  color: #6b7280;
+  min-width: 120px;
+}
+
+.review-value {
+  color: #111827;
+}
+
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.option-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.option-item:hover {
+  background: #f9fafb;
+  border-color: #10b981;
+}
+
+.option-item input[type="radio"] {
+  cursor: pointer;
+}
+
+.option-item span {
+  font-size: 14px;
+  color: #374151;
+}
+

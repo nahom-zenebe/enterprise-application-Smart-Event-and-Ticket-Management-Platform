@@ -1,0 +1,39 @@
+<div class="events-container">
+  <header class="events-header">
+    <div>
+      <h1>My Events</h1>
+    </div>
+    <div class="header-actions">
+      <a routerLink="/organizer/event-editor" class="create-btn">+ Create New Event</a>
+    </div>
+  </header>
+
+  <div class="events-filters">
+    <div class="filter-group">
+      <input 
+        type="text" 
+        class="filter-input" 
+        placeholder="Search events..." />
+    </div>
+    <div class="filter-group">
+      <select class="filter-select">
+        <option>All Status</option>
+        <option>Active</option>
+        <option>Draft</option>
+        <option>Upcoming</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <select class="filter-select">
+        <option>Sort by: Date</option>
+        <option>Sort by: Name</option>
+        <option>Sort by: Revenue</option>
+      </select>
+    </div>
+
+  </div>
+
+  <app-bulk-actions></app-bulk-actions>
+  <app-events-table></app-events-table>
+</div>
+

@@ -1,0 +1,334 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #111827; }
+
+header { display: flex; justify-content: space-between; align-items: center; padding: 16px 40px; background: #e5e7eb; }
+.logo { font-weight: 700; font-size: 20px; }
+nav a { margin: 0 12px; font-size: 14px; text-decoration: none; color: #111827; }
+.nav-actions { display: flex; gap: 12px; }
+.btn { padding: 8px 18px; border-radius: 999px; border: 1px solid transparent; font-size: 14px; cursor: pointer; text-decoration: none; display: inline-block; }
+.btn-outline { border-color: #111827; background: #fff; }
+.btn-primary { background: #064e3b; color: #fff; }
+.btn:hover { opacity: 0.9; }
+
+.hero { background: #b8b8b0; padding: 80px 40px 120px; position: relative; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+.hero-actions { display: flex; gap: 16px; margin-top: 160px; }
+.hero-actions .btn { background: #fff; border-color: #111827; }
+
+main { background: #f9fafb; }
+
+.section { padding: 60px 40px; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+.section-title { text-align: center; font-size: 28px; font-weight: 700; margin-bottom: 32px; }
+
+/* About events cards */
+.events-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; justify-items: center; width: 100%; }
+.event-card { width: 260px; border-radius: 12px; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden; }
+.event-img { height: 80px; background: #d1d5db; }
+.event-body { padding: 10px 14px 14px; font-size: 12px; }
+.event-city { font-weight: 600; margin-bottom: 4px; }
+.event-meta { color: #4b5563; line-height: 1.4; margin-bottom: 8px; }
+.event-btn { display: inline-block; margin-top: 4px; padding: 6px 10px; font-size: 11px; border-radius: 6px; background: #facc15; border: none; cursor: pointer; }
+
+/* Features cards */
+.features-wrap { background: #e5e5e5; padding: 60px 40px; min-height: 100vh; display: flex; align-items: center; }
+.features-grid { max-width: 1024px; margin: 0 auto; width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+.feature-card { background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 28px 18px 20px; position: relative; }
+.feature-icon { position: absolute; top: -14px; left: 16px; width: 32px; height: 32px; border-radius: 8px; background: #059669; display: flex; align-items: center; justify-content: center; font-size: 16px; color: #fff; z-index: 1; }
+.feature-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; margin-top: 0; }
+.feature-text { font-size: 13px; color: #4b5563; line-height: 1.5; }
+
+/* FAQ */
+.faq-section { padding: 60px 40px 80px; background: #f9fafb; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+.faq-list { max-width: 960px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 16px; }
+.faq-item { background: #e5e5e5; border-radius: 10px; padding: 14px 18px; font-size: 13px; }
+.faq-header { display: flex; justify-content: space-between; align-items: center; }
+.faq-question { font-weight: 600; }
+.faq-toggle { width: 26px; height: 26px; border-radius: 6px; background: #facc15; border: none; font-weight: 700; cursor: pointer; }
+.faq-answer { margin-top: 8px; color: #4b5563; }
+
+footer { 
+  background: #000; 
+  color: #fff; 
+  padding: 60px 40px 24px; 
+  font-size: 14px; 
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.5fr 2fr;
+  gap: 60px;
+  margin-bottom: 40px;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-logo {
+  font-size: 32px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.footer-tagline {
+  font-size: 14px;
+  color: #d1d5db;
+  line-height: 1.6;
+  max-width: 400px;
+}
+
+.footer-links {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+
+.footer-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.footer-heading {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.footer-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-list li a {
+  color: #d1d5db;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.footer-list li a:hover {
+  color: #fff;
+}
+
+.footer-divider {
+  height: 1px;
+  background: #374151;
+  margin: 40px 0 24px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.footer-copyright {
+  text-align: center;
+  color: #9ca3af;
+  font-size: 14px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (max-width: 1024px) {
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .footer-links {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-links {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  
+  footer {
+    padding: 40px 24px 24px;
+  }
+}
+/* Global reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #111827;
+}
+
+/* Auth layout: left black panel + right form */
+.auth-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.auth-left {
+  flex: 1;
+  background: #050505; /* solid dark panel */
+}
+
+.auth-right {
+  flex: 1;
+  background: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 24px;
+}
+
+/* Form */
+.auth-form {
+  width: 100%;
+  max-width: 420px;
+}
+
+.auth-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+/* Inputs */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.form-group label {
+  font-size: 13px;
+  color: #4b5563;
+  margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group select {
+  height: 44px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  font-size: 14px;
+  outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #166534;
+  box-shadow: 0 0 0 1px rgba(22, 101, 52, 0.1);
+}
+
+/* Submit button */
+.submit-btn {
+  margin-top: 24px;
+  width: 100%;
+  height: 48px;
+  border-radius: 999px;
+  border: none;
+  background: #064e3b;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  box-shadow: 0 14px 32px rgba(15, 118, 110, 0.35);
+}
+
+.submit-btn:hover {
+  background: #065f46;
+}
+
+.submit-icon {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: #022c22;
+  font-size: 14px;
+}
+
+/* Switch links between forms */
+.auth-switch {
+  margin-top: 16px;
+  font-size: 13px;
+  color: #4b5563;
+}
+
+.auth-switch a {
+  color: #065f46;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.auth-switch a:hover {
+  text-decoration: underline;
+}
+
+/* Simple header/buttons reuse (if you keep Eventify header elsewhere) */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 40px;
+  background: #e5e7eb;
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 20px;
+}
+
+nav a {
+  margin: 0 12px;
+  font-size: 14px;
+  text-decoration: none;
+  color: #111827;
+}
+
+.nav-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn-outline {
+  border-color: #111827;
+  background: #fff;
+}
+
+.btn-primary {
+  background: #064e3b;
+  color: #fff;
+}

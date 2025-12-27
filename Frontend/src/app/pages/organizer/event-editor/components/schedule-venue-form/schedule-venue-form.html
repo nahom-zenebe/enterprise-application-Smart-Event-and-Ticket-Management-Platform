@@ -1,0 +1,74 @@
+<form class="schedule-venue-form">
+  <div class="form-section">
+    <h3 class="section-title">Schedule</h3>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="eventDate">Date *</label>
+        <input 
+          id="eventDate" 
+          type="date" 
+          required />
+      </div>
+      <div class="form-group">
+        <label for="eventTime">Time *</label>
+        <input 
+          id="eventTime" 
+          type="time" 
+          required />
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="endDate">End Date</label>
+        <input 
+          id="endDate" 
+          type="date" />
+      </div>
+      <div class="form-group">
+        <label for="endTime">End Time</label>
+        <input 
+          id="endTime" 
+          type="time" />
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h3 class="section-title">Venue</h3>
+    <div class="form-group">
+      <label for="venueName">Venue Name *</label>
+      <input 
+        id="venueName" 
+        type="text" 
+        placeholder="Enter venue name"
+        required />
+    </div>
+    <div class="form-group">
+      <label for="venueAddress">Address *</label>
+      <input 
+        id="venueAddress" 
+        type="text" 
+        placeholder="Enter full address"
+        required />
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="venueCity">City *</label>
+        <input 
+          id="venueCity" 
+          type="text" 
+          placeholder="Enter city"
+          required />
+      </div>
+      <div class="form-group">
+        <label for="venueCapacity">Capacity</label>
+        <input 
+          id="venueCapacity" 
+          type="number" 
+          placeholder="Max attendees"
+          min="1" />
+      </div>
+    </div>
+  </div>
+</form>
+

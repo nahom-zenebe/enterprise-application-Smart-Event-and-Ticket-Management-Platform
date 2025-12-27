@@ -1,0 +1,46 @@
+<div class="event-editor-container">
+  <header class="editor-header">
+    <h1>Create New Event</h1>
+  </header>
+
+  <div class="steps-indicator">
+    <div 
+      *ngFor="let step of steps" 
+      class="step-item"
+      [class.active]="currentStep === step.number"
+      [class.completed]="currentStep > step.number">
+      <div class="step-number">{{ step.number }}</div>
+      <div class="step-title">{{ step.title }}</div>
+    </div>
+  </div>
+
+  <div class="editor-content">
+    <app-basic-info-form *ngIf="currentStep === 1"></app-basic-info-form>
+    <app-schedule-venue-form *ngIf="currentStep === 2"></app-schedule-venue-form>
+    <app-tickets-pricing-form *ngIf="currentStep === 3"></app-tickets-pricing-form>
+    <app-review-publish *ngIf="currentStep === 4"></app-review-publish>
+  </div>
+
+  <div class="editor-actions">
+    <button 
+      class="btn-secondary" 
+      *ngIf="currentStep > 1"
+      (click)="previousStep()">
+      Cancel
+    </button>
+    <div class="actions-right">
+      <button 
+        class="btn-primary" 
+        *ngIf="currentStep < totalSteps"
+        (click)="nextStep()">
+        Next: {{ steps[currentStep].title }}
+      </button>
+      <button 
+        class="btn-primary" 
+        *ngIf="currentStep === totalSteps">
+        Publish Event
+      </button>
+    </div>
+  </div>
+</div>
+
