@@ -1,0 +1,26 @@
+<div class="chart-card">
+  <div class="chart-header">
+    <h2 class="chart-title">Revenue & Attendee Trends</h2>
+    <select class="chart-period" [(ngModel)]="selectedPeriod">
+      <option>Last 7 days</option>
+      <option>Last 30 days</option>
+      <option>Last 3 months</option>
+      <option>Last year</option>
+    </select>
+  </div>
+  <div class="chart-placeholder">
+    <div class="chart-legend">
+      <div class="legend-item">
+        <span class="legend-color revenue"></span>
+        <span>Revenue</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-color attendee"></span>
+        <span>Attendees</span>
+      </div>
+    </div>
+    <p>Line chart visualization will be displayed here</p>
+    <p class="chart-hint">Revenue (left axis) and Attendees (right axis) over time</p>
+  </div>
+</div>
+

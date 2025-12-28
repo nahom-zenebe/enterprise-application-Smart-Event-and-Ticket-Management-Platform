@@ -1,0 +1,37 @@
+<div class="admin-layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2 class="logo">EventIQ</h2>
+    </div>
+    <nav class="sidebar-nav">
+      <a 
+        *ngFor="let item of navItems" 
+        [routerLink]="item.path"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{exact: item.path === '/admin/dashboard'}"
+        class="nav-item">
+        <span class="nav-label">{{ item.label }}</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Top Header -->
+    <header class="top-header">
+      <div class="header-left">
+      </div>
+      <div class="header-right">
+        <span class="user-label">Admin</span>
+        <div class="user-avatar">AD</div>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <main class="page-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
+

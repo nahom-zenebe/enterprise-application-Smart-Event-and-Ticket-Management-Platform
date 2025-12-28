@@ -1,0 +1,69 @@
+<div class="events-container">
+  <header class="events-header">
+    <h1>Event Manager</h1>
+  </header>
+
+  <div class="events-filters">
+    <input 
+      type="text" 
+      class="filter-input" 
+      placeholder="Search events..." />
+    <select class="filter-select">
+      <option>All Status</option>
+      <option>Active</option>
+      <option>Draft</option>
+      <option>Upcoming</option>
+    </select>
+    <select class="filter-select">
+      <option>Sort by: Date</option>
+      <option>Sort by: Name</option>
+      <option>Sort by: Revenue</option>
+    </select>
+  </div>
+
+  <div class="events-table-card">
+    <table class="events-table">
+      <thead>
+        <tr>
+          <th>Event ID</th>
+          <th>Event Name</th>
+          <th>Organizer</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Tickets</th>
+          <th>Revenue</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let event of events">
+          <td>{{ event.id }}</td>
+          <td>
+            <div class="event-name">{{ event.name }}</div>
+          </td>
+          <td>{{ event.organizer }}</td>
+          <td>{{ event.date }}</td>
+          <td>
+            <span 
+              class="status-badge" 
+              [class.active]="event.status === 'Active'"
+              [class.draft]="event.status === 'Draft'"
+              [class.upcoming]="event.status === 'Upcoming'">
+              {{ event.status }}
+            </span>
+          </td>
+          <td>{{ event.tickets }}</td>
+          <td class="revenue">${{ event.revenue | number }}</td>
+          <td>
+            <div class="action-buttons">
+              <button class="action-btn" title="View">👁️</button>
+              <button class="action-btn" title="Edit">✏️</button>
+              <button class="action-btn" title="Delete">🗑️</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+

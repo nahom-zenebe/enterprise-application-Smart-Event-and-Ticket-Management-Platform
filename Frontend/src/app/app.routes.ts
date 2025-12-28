@@ -8,6 +8,11 @@ import { EventsComponent } from './pages/organizer/events/events.component';
 import { EventEditorComponent } from './pages/organizer/event-editor/event-editor.component';
 import { OrdersComponent } from './pages/organizer/orders/orders.component';
 import { SettingsComponent } from './pages/organizer/settings/settings.component';
+import { AdminLayoutComponent } from './pages/admin/admin-layout/admin-layout.component';
+import { AdminDashboardComponent } from './pages/admin/dashboard/dashboard.component';
+import { AdminEventsComponent } from './pages/admin/events/events.component';
+import { AdminUsersComponent } from './pages/admin/users/users.component';
+import { AttendeeComponent } from './pages/attendee/attendee.component';
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -25,5 +30,16 @@ export const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
+  { 
+    path: 'admin', 
+    component: AdminLayoutComponent,
+    children: [
+      { path: 'dashboard', component: AdminDashboardComponent },
+      { path: 'events', component: AdminEventsComponent },
+      { path: 'users', component: AdminUsersComponent },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
+    ]
+  },
+  { path: 'attendee', component: AttendeeComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' } // default route
 ];
