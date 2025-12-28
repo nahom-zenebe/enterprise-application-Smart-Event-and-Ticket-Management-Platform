@@ -4,15 +4,7 @@ using EventPlanning.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Security.Infrastructure.Persistence;
-
-
-using EventPlanning.Application.Interfaces;
-using EventPlanning.Infrastructure.Persistence;              
-using EventPlanning.Infrastructure.Repositories;
-
 var builder = WebApplication.CreateBuilder(args);
-
 builder.Configuration
     .AddJsonFile("src/SmartPlatform.Api/appsettings.json", optional: false, reloadOnChange: true)
     .AddJsonFile($"src/SmartPlatform.Api/appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
@@ -53,7 +45,7 @@ builder.Services.AddDbContext<EventPlanningDbContext>(
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<ISessionRepository, SessionRepository>();
 builder.Services.AddScoped<IVenueRepository, VenueRepository>();
-
+builder.Services.AddScoped<IPerformerRepository, PerformerRepository>();
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -102,5 +94,4 @@ app.MapGet("/admin", () => "Admin Access")
 
 app.MapGet("/user", () => "User Access")
    .RequireAuthorization("UserPolicy");
-
 app.Run();
