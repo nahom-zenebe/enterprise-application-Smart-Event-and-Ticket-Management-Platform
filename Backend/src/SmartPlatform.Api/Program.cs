@@ -1,15 +1,13 @@
 using EventPlanning.Application.Interfaces;
 using EventPlanning.Infrastructure.Persistence;              
 using EventPlanning.Infrastructure.Repositories;
+using Ticketing.Infrastructure.Persistence;
+using Ticketing.Infrastructure.Repositories;
+using Ticketing.Application.Interfaces;
+using Ticketing.Application.Commands;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Security.Infrastructure.Persistence;
-
-
-using EventPlanning.Application.Interfaces;
-using EventPlanning.Infrastructure.Persistence;              
-using EventPlanning.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,12 +45,17 @@ var postgresConnectionString =
     builder.Configuration.GetConnectionString("Postgres")
     ?? throw new InvalidOperationException("Missing connection string 'Postgres'.");
 
+ builder.Services.AddDbContext<TicketingDbContext>(options =>
+    options.UseNpgsql(postgresConnectionString));
+
 builder.Services.AddDbContext<EventPlanningDbContext>(
     options => options.UseNpgsql(postgresConnectionString));
 
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<ISessionRepository, SessionRepository>();
 builder.Services.AddScoped<IVenueRepository, VenueRepository>();
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+builder.Services.AddScoped<ITicketService, TicketCommandHandlers>();
 
 var app = builder.Build();
 
