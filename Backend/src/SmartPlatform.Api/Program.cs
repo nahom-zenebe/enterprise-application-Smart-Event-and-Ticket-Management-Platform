@@ -20,8 +20,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     {
         options.Authority = builder.Configuration["Keycloak:Authority"];
         options.Audience = builder.Configuration["Keycloak:Audience"];
-        options.RequireHttpsMetadata = false;
+   options.RequireHttpsMetadata = false; // Only for dev
     });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("UserPolicy", policy => policy.RequireRole("User"));
+});
 
 
 builder.Services.AddAuthorization();
@@ -60,5 +66,13 @@ app.UseAuthorization();
 app.UseHttpsRedirection();
 
 app.MapControllers();
+
+//examples endpoint show how to apply middleware to the endpoints
+
+app.MapGet("/admin", () => "Admin Access")
+   .RequireAuthorization("AdminPolicy");
+
+app.MapGet("/user", () => "User Access")
+   .RequireAuthorization("UserPolicy");
 
 app.Run();
