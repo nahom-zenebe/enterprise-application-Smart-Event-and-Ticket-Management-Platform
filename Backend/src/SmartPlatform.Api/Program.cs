@@ -1,3 +1,6 @@
+using EventPlanning.Application.Interfaces;
+using EventPlanning.Infrastructure.Persistence;              
+using EventPlanning.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -37,26 +40,51 @@ builder.Services.AddAuthorization();
 builder.Services.AddOpenApi();
 
 builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+var postgresConnectionString =
+    builder.Configuration.GetConnectionString("Postgres")
+    ?? throw new InvalidOperationException("Missing connection string 'Postgres'.");
 
-builder.Services.AddDbContext<EventPlanningDbContext>(options =>
-    options.UseNpgsql(postgresConnectionString));
+builder.Services.AddDbContext<EventPlanningDbContext>(
+    options => options.UseNpgsql(postgresConnectionString));
+
 builder.Services.AddScoped<IEventRepository, EventRepository>();
+builder.Services.AddScoped<ISessionRepository, SessionRepository>();
+builder.Services.AddScoped<IVenueRepository, VenueRepository>();
 
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var eventDb = scope.ServiceProvider.GetRequiredService<EventPlanningDbContext>();
-    await eventDb.Database.EnsureCreatedAsync();
+    var dbContext = scope.ServiceProvider.GetRequiredService<EventPlanningDbContext>();
+
+    try
+    {
+        dbContext.Database.Migrate();
+        Console.WriteLine("Database migrated successfully.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Migration failed: {ex.Message}");
+
+        try
+        {
+            dbContext.Database.EnsureCreated();
+            Console.WriteLine("Database created successfully.");
+        }
+        catch (Exception ex2)
+        {
+            Console.WriteLine($"Database creation failed: {ex2.Message}");
+        }
+    }
 }
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseAuthentication();
@@ -64,7 +92,7 @@ app.UseAuthorization();
 
 
 app.UseHttpsRedirection();
-
+app.UseAuthorization();
 app.MapControllers();
 
 //examples endpoint show how to apply middleware to the endpoints

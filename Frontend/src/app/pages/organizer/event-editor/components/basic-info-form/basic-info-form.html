@@ -1,0 +1,40 @@
+<form class="basic-info-form">
+  <h3 class="section-title">Event Information</h3>
+  
+  <div class="form-group">
+    <label for="eventTitle">Event Title *</label>
+    <input 
+      id="eventTitle" 
+      type="text" 
+      placeholder="e.g., Summer Music Festival 2024"
+      required />
+  </div>
+
+  <div class="form-group">
+    <label for="eventCategory">Category *</label>
+    <select id="eventCategory" required>
+      <option value="" disabled selected>Select category</option>
+      <option>Conference</option>
+      <option>Workshop</option>
+      <option>Concert</option>
+      <option>Sports</option>
+      <option>Other</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="eventDescription">Description</label>
+    <textarea 
+      id="eventDescription" 
+      rows="6"
+      placeholder="Describe your event..."></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="eventImage">Cover Image</label>
+    <div class="image-upload-area">
+      <p>Drag & drop or click to upload</p>
+      <p class="upload-hint">Recommended: 1200x600px, JPG or PNG</p>
+    </div>
+  </div>
+</form>

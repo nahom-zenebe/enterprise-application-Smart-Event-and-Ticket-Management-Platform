@@ -1,0 +1,60 @@
+<form class="tickets-pricing-form">
+  <div class="form-section">
+    <div class="section-header">
+      <h3 class="section-title">Ticket Types</h3>
+      <button type="button" class="add-btn" (click)="addTicketType()">
+        + Add Ticket Type
+      </button>
+    </div>
+
+    <div class="ticket-types-list">
+      <div 
+        *ngFor="let ticket of ticketTypes; let i = index" 
+        class="ticket-type-card">
+        <div class="ticket-header">
+          <h4>Ticket Type {{ i + 1 }}</h4>
+          <button 
+            type="button" 
+            class="remove-btn"
+            *ngIf="ticketTypes.length > 1"
+            (click)="removeTicketType(i)">
+            Remove
+          </button>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Ticket Name *</label>
+            <input 
+              type="text" 
+              placeholder="e.g., General Admission"
+              [(ngModel)]="ticket.name"
+              name="ticketName{{i}}"
+              required />
+          </div>
+          <div class="form-group">
+            <label>Price ($) *</label>
+            <input 
+              type="number" 
+              placeholder="0.00"
+              min="0"
+              step="0.01"
+              [(ngModel)]="ticket.price"
+              name="ticketPrice{{i}}"
+              required />
+          </div>
+          <div class="form-group">
+            <label>Quantity *</label>
+            <input 
+              type="number" 
+              placeholder="Available tickets"
+              min="1"
+              [(ngModel)]="ticket.quantity"
+              name="ticketQuantity{{i}}"
+              required />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
