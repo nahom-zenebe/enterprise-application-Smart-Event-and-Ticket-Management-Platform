@@ -44,7 +44,7 @@ var postgresConnectionString =
     builder.Configuration.GetConnectionString("Postgres")
     ?? throw new InvalidOperationException("Missing connection string 'Postgres'.");
 
- builder.Services.AddDbContext<TicketingDbContext>(options =>
+builder.Services.AddDbContext<TicketingDbContext>(options =>
     options.UseNpgsql(postgresConnectionString));
 
 builder.Services.AddDbContext<EventPlanningDbContext>(
@@ -75,7 +75,7 @@ using (var scope = app.Services.CreateScope())
         try
         {
             dbContext.Database.EnsureCreated();
-            Console.WriteLine("Database created successfully.");git status
+            Console.WriteLine("Database created successfully.");
         }
         catch (Exception ex2)
         {
