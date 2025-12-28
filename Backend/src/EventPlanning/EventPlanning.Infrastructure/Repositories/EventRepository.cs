@@ -1,6 +1,7 @@
 // Repositories/EventRepository.cs
 using Microsoft.EntityFrameworkCore;
 using System;
+using EventPlanning.Infrastructure.Persistence;   
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
