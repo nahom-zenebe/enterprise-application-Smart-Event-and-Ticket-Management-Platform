@@ -75,7 +75,7 @@ using (var scope = app.Services.CreateScope())
         try
         {
             dbContext.Database.EnsureCreated();
-            Console.WriteLine("Database created successfully.");
+            Console.WriteLine("Database created successfully.");git status
         }
         catch (Exception ex2)
         {
