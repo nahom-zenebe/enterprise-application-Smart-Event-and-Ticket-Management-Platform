@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
-
 builder.Configuration
     .AddJsonFile("src/SmartPlatform.Api/appsettings.json", optional: false, reloadOnChange: true)
     .AddJsonFile($"src/SmartPlatform.Api/appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
@@ -57,6 +56,7 @@ builder.Services.AddScoped<IVenueRepository, VenueRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<ITicketService, TicketCommandHandlers>();
 
+builder.Services.AddScoped<IPerformerRepository, PerformerRepository>();
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -105,5 +105,4 @@ app.MapGet("/admin", () => "Admin Access")
 
 app.MapGet("/user", () => "User Access")
    .RequireAuthorization("UserPolicy");
-
 app.Run();
