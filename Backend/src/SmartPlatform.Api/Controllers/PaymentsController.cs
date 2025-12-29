@@ -21,6 +21,7 @@ namespace Payments.API.Controllers
         public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentRequest request)
         {
             var command = new CreatePaymentCommand(
+                request.TicketId,
                 request.UserId,
                 request.Amount,
                 request.Method
@@ -32,6 +33,14 @@ namespace Payments.API.Controllers
             {
                 message = "Payment processed successfully"
             });
+        }
+
+        public class CreatePaymentRequest
+        {
+            public int TicketId { get; set; }
+            public int UserId { get; set; }
+            public decimal Amount { get; set; }
+            public PaymentMethod Method { get; set; }
         }
     }
 }

@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Shared.Application.Payments.Interfaces;
 using Shared.Domain.Payments.Entities;
-using Shared.Domain.Payments.Repositories;
 using Shared.Infrastructure.Payments.Persistence;
 
 namespace Shared.Infrastructure.Payments.Repositories

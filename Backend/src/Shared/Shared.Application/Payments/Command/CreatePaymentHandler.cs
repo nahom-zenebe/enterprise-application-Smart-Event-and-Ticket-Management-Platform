@@ -1,7 +1,8 @@
+using System;
 using System.Threading.Tasks;
 using Shared.Application.Payments.Interfaces;
 using Shared.Domain.Payments.Entities;
-using Shared.Domain.Payments.Repositories;
+using Shared.Domain.Payments.Enums;
 
 namespace Shared.Application.Payments.Commands.CreatePayment
 {
@@ -21,9 +22,13 @@ namespace Shared.Application.Payments.Commands.CreatePayment
         public async Task Handle(CreatePaymentCommand command)
         {
             var payment = new Payment(
+                Guid.NewGuid(),
+                command.TicketId,
                 command.UserId,
                 command.Amount,
-                command.Method
+                command.Method,
+                PaymentStatus.Processing,
+                DateTime.UtcNow
             );
 
             var success = await _gateway.ProcessAsync(command.Amount);

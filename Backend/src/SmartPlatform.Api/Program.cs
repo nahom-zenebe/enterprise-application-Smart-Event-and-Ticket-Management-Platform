@@ -5,6 +5,9 @@ using Ticketing.Infrastructure.Persistence;
 using Ticketing.Infrastructure.Repositories;
 using Ticketing.Application.Interfaces;
 using Ticketing.Application.Commands;
+using Shared.Infrastructure.Payments.Persistence;
+using Shared.Infrastructure.Payments.Repositories;
+using Shared.Application.Payments.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -53,11 +56,15 @@ builder.Services.AddDbContext<TicketingDbContext>(options =>
 builder.Services.AddDbContext<EventPlanningDbContext>(
     options => options.UseNpgsql(postgresConnectionString));
 
+builder.Services.AddDbContext<PaymentDbContext>(options =>
+    options.UseNpgsql(postgresConnectionString));
+
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<ISessionRepository, SessionRepository>();
 builder.Services.AddScoped<IVenueRepository, VenueRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<ITicketService, TicketCommandHandlers>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 
 builder.Services.AddScoped<IPerformerRepository, PerformerRepository>();
 var app = builder.Build();
