@@ -8,6 +8,7 @@ using Ticketing.Application.Commands;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration
@@ -29,6 +30,8 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("UserPolicy", policy => policy.RequireRole("User"));
 });
 
+StripeConfiguration.ApiKey =
+    builder.Configuration["Stripe:SecretKey"];
 
 builder.Services.AddAuthorization();
 
