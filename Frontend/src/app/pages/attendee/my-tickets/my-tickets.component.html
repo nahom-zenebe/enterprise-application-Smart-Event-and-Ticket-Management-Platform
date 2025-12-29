@@ -1,0 +1,8 @@
+<h2>My Tickets</h2>
+
+<ul>
+  <li *ngFor="let t of tickets">
+    {{ t.event }} – {{ t.status }}
+    <button (click)="viewTicket(t.id)">View QR</button>
+  </li>
+</ul>
