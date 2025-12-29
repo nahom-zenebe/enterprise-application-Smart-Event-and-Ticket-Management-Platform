@@ -25,7 +25,7 @@ export class SigninComponent {
         this.router.navigate(['/organizer/dashboard']);
         break;
       case 'attendee':
-        this.router.navigate(['/attendee']);
+        this.router.navigate(['/attendee/events']);
         break;
       default:
         this.router.navigate(['/organizer/dashboard']);
