@@ -1,0 +1,9 @@
+<h2>Browse Events</h2>
+
+<div class="event-grid">
+  <div class="event-card" *ngFor="let e of events" (click)="openEvent(e.id)">
+    <h3>{{ e.title }}</h3>
+    <p>{{ e.date }} – {{ e.venue }}</p>
+    <strong>{{ e.price }} ETB</strong>
+  </div>
+</div>
