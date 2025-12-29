@@ -1,8 +1,21 @@
-<h2>My Tickets</h2>
-
-<ul>
-  <li *ngFor="let t of tickets">
-    {{ t.event }} – {{ t.status }}
-    <button (click)="viewTicket(t.id)">View QR</button>
-  </li>
-</ul>
+<div class="page">
+    <div class="card">
+      <h2>My Tickets</h2>
+  
+      <table>
+        <tr>
+          <th>Event</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+        <tr *ngFor="let t of tickets">
+          <td>{{ t.event }}</td>
+          <td>{{ t.status }}</td>
+          <td>
+            <button (click)="viewTicket(t.id)">View QR</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  

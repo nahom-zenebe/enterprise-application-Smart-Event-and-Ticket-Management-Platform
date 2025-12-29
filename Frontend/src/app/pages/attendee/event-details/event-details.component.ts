@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AttendeeService } from '../attendee.service';
+import { AttendeeService } from '../attendee.services';
 
 @Component({
   templateUrl: './event-details.component.html',
