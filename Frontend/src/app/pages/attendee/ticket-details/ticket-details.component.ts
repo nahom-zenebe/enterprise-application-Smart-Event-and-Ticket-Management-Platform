@@ -6,9 +6,9 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./ticket-details.component.css']
 })
 export class TicketDetailsComponent {
-  ticketId = '';
+  ticketId: string | null;
 
   constructor(route: ActivatedRoute) {
-    this.ticketId = route.snapshot.paramMap.get('id')!;
+    this.ticketId = route.snapshot.paramMap.get('id');
   }
 }
