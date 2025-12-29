@@ -12,7 +12,6 @@ import { AdminLayoutComponent } from './pages/admin/admin-layout/admin-layout.co
 import { AdminDashboardComponent } from './pages/admin/dashboard/dashboard.component';
 import { AdminEventsComponent } from './pages/admin/events/events.component';
 import { AdminUsersComponent } from './pages/admin/users/users.component';
-import { AttendeeComponent } from './pages/attendee/attendee.component';
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -39,7 +38,11 @@ export const routes: Routes = [
       { path: 'users', component: AdminUsersComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
-  },
-  { path: 'attendee', component: AttendeeComponent },
+  },{
+    path: 'attendee',
+    loadChildren: () =>
+      import('./pages/attendee/attendee.routes')
+        .then(m => m.attendeeRoutes)
+  },  
   { path: '', redirectTo: 'home', pathMatch: 'full' } // default route
 ];
