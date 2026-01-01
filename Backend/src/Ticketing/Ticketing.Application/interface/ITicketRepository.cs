@@ -17,21 +17,5 @@ namespace Ticketing.Application.Interfaces
         Task ConfirmAsync(Guid id);
         Task CancelAsync(Guid id);
         Task CheckInAsync(Guid id);
-        
-        Task<string> GetQRCodeAsync(Guid id);
-        Task<ValidationResult> ValidateTicketAsync(ValidateTicketRequest request);
-    }
-    
-    public class ValidationResult
-    {
-        public bool IsValid { get; set; }
-        public string Message { get; set; }
-        public TicketDto Ticket { get; set; }
-    }
-    
-    public class ValidateTicketRequest
-    {
-        public Guid? TicketId { get; set; }
-        public string QRCode { get; set; }
     }
 }
