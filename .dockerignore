@@ -1,0 +1,14 @@
+.git/
+.gitignore
+*.md
+!DOCKER_SETUP.md
+node_modules/
+.vs/
+.vscode/
+bin/
+obj/
+*.log
+*.db
+*.db-shm
+*.db-wal
+

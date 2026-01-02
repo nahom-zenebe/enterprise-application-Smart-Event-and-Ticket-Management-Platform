@@ -1,4 +1,4 @@
-
+// DTOs/EventDto.cs
 using System;
 
 public class EventDto

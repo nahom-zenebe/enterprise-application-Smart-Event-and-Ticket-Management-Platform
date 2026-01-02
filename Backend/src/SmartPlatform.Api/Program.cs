@@ -1,118 +1,88 @@
-using EventPlanning.Application.Interfaces;
-using EventPlanning.Infrastructure.Persistence;              
-using EventPlanning.Infrastructure.Repositories;
-using Ticketing.Infrastructure.Persistence;
-using Ticketing.Infrastructure.Repositories;
-using Ticketing.Application.Interfaces;
-using Ticketing.Application.Commands;
-using Shared.Infrastructure.Payments.Persistence;
-using Shared.Infrastructure.Payments.Repositories;
-using Shared.Application.Payments.Interfaces;
-using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
-using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Configuration
-    .AddJsonFile("src/SmartPlatform.Api/appsettings.json", optional: false, reloadOnChange: true)
-    .AddJsonFile($"src/SmartPlatform.Api/appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
 
-
+// ---------------- AUTHENTICATION ----------------
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.Authority = builder.Configuration["Keycloak:Authority"];
-        options.Audience = builder.Configuration["Keycloak:Audience"];
-   options.RequireHttpsMetadata = false; // Only for dev
-    });
-
-builder.Services.AddAuthorization(options =>
+.AddJwtBearer(options =>
 {
-    options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
-    options.AddPolicy("UserPolicy", policy => policy.RequireRole("User"));
+    options.Authority = "http://localhost:8080/realms/dotnet-realm";
+    options.RequireHttpsMetadata = false;
+
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidIssuer = "http://localhost:8080/realms/dotnet-realm",
+
+        ValidateAudience = true,
+        ValidAudience = "dotnet-api",
+
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.FromMinutes(2),
+
+        RoleClaimType = ClaimTypes.Role
+    };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            Console.WriteLine(
+                context.Request.Headers.Authorization.ToString().StartsWith("Bearer ")
+                    ? "✅ Token received in header: Yes"
+                    : "❌ Token received in header: No"
+            );
+            return Task.CompletedTask;
+        },
+
+        OnAuthenticationFailed = context =>
+        {
+            Console.WriteLine("❌ AUTH FAILED");
+            Console.WriteLine(context.Exception.Message);
+            return Task.CompletedTask;
+        },
+
+        OnTokenValidated = context =>
+        {
+            Console.WriteLine("✅ TOKEN VALIDATED SUCCESSFULLY");
+            return Task.CompletedTask;
+        }
+    };
 });
 
-StripeConfiguration.ApiKey =
-    builder.Configuration["Stripe:SecretKey"];
+// ---------------- CLAIMS TRANSFORMATION ----------------
+builder.Services.AddScoped<IClaimsTransformation, KeycloakRoleClaimsTransformation>();
 
-builder.Services.AddAuthorization();
-
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+// ---------------- AUTHORIZATION ----------------
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminPolicy", p => p.RequireRole("Admin"));
+    options.AddPolicy("BuyerPolicy", p => p.RequireRole("Buyer"));
+    options.AddPolicy("SellerPolicy", p => p.RequireRole("Seller"));
+});
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var postgresConnectionString =
-    builder.Configuration.GetConnectionString("Postgres")
-    ?? throw new InvalidOperationException("Missing connection string 'Postgres'.");
-
-builder.Services.AddDbContext<TicketingDbContext>(options =>
-    options.UseNpgsql(postgresConnectionString));
-
-builder.Services.AddDbContext<EventPlanningDbContext>(
-    options => options.UseNpgsql(postgresConnectionString));
-
-builder.Services.AddDbContext<PaymentDbContext>(options =>
-    options.UseNpgsql(postgresConnectionString));
-
-builder.Services.AddScoped<IEventRepository, EventRepository>();
-builder.Services.AddScoped<ISessionRepository, SessionRepository>();
-builder.Services.AddScoped<IVenueRepository, VenueRepository>();
-builder.Services.AddScoped<ITicketRepository, TicketRepository>();
-builder.Services.AddScoped<ITicketService, TicketCommandHandlers>();
-builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
-
-builder.Services.AddScoped<IPerformerRepository, PerformerRepository>();
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<EventPlanningDbContext>();
-
-    try
-    {
-        dbContext.Database.Migrate();
-        Console.WriteLine("Database migrated successfully.");
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Migration failed: {ex.Message}");
-
-        try
-        {
-            dbContext.Database.EnsureCreated();
-            Console.WriteLine("Database created successfully.");
-        }
-        catch (Exception ex2)
-        {
-            Console.WriteLine($"Database creation failed: {ex2.Message}");
-        }
-    }
-}
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
+// ---------------- MIDDLEWARE ORDER ----------------
 app.UseAuthentication();
 app.UseAuthorization();
 
+// ---------------- TEST ENDPOINTS ----------------
+app.MapGet("/buyer", () => "Buyer Access OK")
+   .RequireAuthorization("BuyerPolicy");
 
-app.UseHttpsRedirection();
-app.UseAuthorization();
-app.MapControllers();
+app.MapGet("/seller", () => "Seller Access OK")
+   .RequireAuthorization("SellerPolicy");
 
-//examples endpoint show how to apply middleware to the endpoints
-
-app.MapGet("/admin", () => "Admin Access")
+app.MapGet("/admin", () => "Admin Access OK")
    .RequireAuthorization("AdminPolicy");
 
-app.MapGet("/user", () => "User Access")
-   .RequireAuthorization("UserPolicy");
 app.Run();

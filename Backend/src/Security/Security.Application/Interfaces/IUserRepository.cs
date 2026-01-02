@@ -1,17 +1,11 @@
-public class IUserRepository
+using System;
+using System.Threading.Tasks;
+
+public interface IUserRepository
 {
-    public Task Register(User user)
-    {
-        throw new System.NotImplementedException();
-    }
+    Task AddAsync(User user);
 
-    public Task<User> GetUserbyId(int id)
-    {
-        throw new System.NotImplementedException();
-    }
+    Task<User?> GetUserbyId(Guid id);
 
-    public Task Login(User user)
-    {
-        throw new System.NotImplementedException();
-    }
+    Task Login(User user);
 }

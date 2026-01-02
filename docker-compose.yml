@@ -1,0 +1,99 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: smart-platform-postgres
+    environment:
+      POSTGRES_DB: SmartEventPlatformDb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1904
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    networks:
+      - smart-platform-network
+
+  keycloak-db:
+    image: postgres:16-alpine
+    container_name: smart-platform-keycloak-db
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak
+    volumes:
+      - keycloak_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U keycloak"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    networks:
+      - smart-platform-network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0
+    container_name: smart-platform-keycloak
+    command: start-dev --import-realm
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloak-db:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+      KC_HEALTH_ENABLED: true
+      KC_HTTP_ENABLED: true
+      KC_HOSTNAME_STRICT: false
+      KC_HOSTNAME_STRICT_HTTPS: false
+    ports:
+      - "8080:8080"
+    depends_on:
+      keycloak-db:
+        condition: service_healthy
+    volumes:
+      - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json:ro
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/8080 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 90s
+    networks:
+      - smart-platform-network
+
+  backend-api:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: smart-platform-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Postgres: Host=postgres;Port=5432;Database=SmartEventPlatformDb;Username=postgres;Password=1904
+      Keycloak__Authority: http://keycloak:8080/realms/dotnet-realm
+      Keycloak__Audience: dotnet-api
+      Keycloak__RequireHttpsMetadata: "false"
+    ports:
+      - "5000:8080"
+      - "5001:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+    networks:
+      - smart-platform-network
+
+volumes:
+  postgres_data:
+  keycloak_db_data:
+
+networks:
+  smart-platform-network:
+    driver: bridge

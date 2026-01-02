@@ -1,13 +1,11 @@
-public class LoginUserCommand{
-   public string Email{get;set;}
-   public string Password { get; }
+public class LoginUserCommand
+{
+   public string Email { get; set; }
+   public string Password { get; set; }
 
-
-
-   public LoginUserCommand(string Email,string Password){
-      Email=Email
-      Password=password
+   public LoginUserCommand(string email, string password)
+   {
+      Email = email;
+      Password = password;
    }
-
-
 }

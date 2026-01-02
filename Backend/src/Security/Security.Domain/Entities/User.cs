@@ -1,9 +1,10 @@
 
 
 
-public enum RoleType {
-    Buyer
-    Seller
+public enum RoleType
+{
+    Buyer,
+    Seller,
     Admin
 }
 
@@ -28,7 +29,7 @@ public class User
         _domainEvents.Add(new UserRegistered(this));
     }
 
-    public void UpdateProfile(string email, string role)
+    public void UpdateProfile(string email, RoleType role)
     {
         Email = email;
         Role = role;
