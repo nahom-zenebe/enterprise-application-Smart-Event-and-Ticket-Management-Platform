@@ -7,7 +7,7 @@ using Ticketing.Application.Interfaces;
 namespace Ticketing.API.Controllers
 {
     [ApiController]
-    [Route("api/tickets")]
+    [Route("tickets")]
     public class TicketController : ControllerBase
     {
         private readonly ITicketService _service;
@@ -71,6 +71,49 @@ namespace Ticketing.API.Controllers
         {
             await _service.CheckInAsync(id);
             return NoContent();
+        }
+
+        [HttpGet("{id}/qrcode")]
+        public async Task<IActionResult> GetQRCode(Guid id)
+        {
+            try
+            {
+                var qrCode = await _service.GetQRCodeAsync(id);
+                return Ok(new { qrCode });
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "Ticket not found")
+                    return NotFound(new { message = ex.Message });
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpPost("validate")]
+        public async Task<IActionResult> ValidateTicket([FromBody] ValidateTicketRequest request)
+        {
+            if (request == null || (!request.TicketId.HasValue && string.IsNullOrWhiteSpace(request.QRCode)))
+            {
+                return BadRequest(new { message = "Either TicketId or QRCode must be provided" });
+            }
+
+            try
+            {
+                var result = await _service.ValidateTicketAsync(request);
+                
+                if (result.IsValid)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
 }

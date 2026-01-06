@@ -21,10 +21,24 @@ public class AuthController : ControllerBase
         return Ok("Authenticated user");
     }
 
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "Admin")]
     [HttpGet("admin")]
     public IActionResult AdminOnly()
     {
         return Ok("Admin only endpoint");
+    }
+
+    [Authorize(Roles = "Buyer")]
+    [HttpGet("buyer")]
+    public IActionResult BuyerOnly()
+    {
+        return Ok("Buyer only endpoint");
+    }
+
+    [Authorize(Roles = "Seller")]
+    [HttpGet("seller")]
+    public IActionResult SellerOnly()
+    {
+        return Ok("Seller only endpoint");
     }
 }

@@ -1,0 +1,251 @@
+{
+  "info": {
+    "name": "Smart Event Platform API",
+    "description": "Quick reference for all API endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Tickets",
+      "item": [
+        {
+          "name": "Create Ticket",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": 0,\n  \"price\": 50.00,\n  \"discountCode\": \"SAVE10\",\n  \"reservationID\": \"00000000-0000-0000-0000-000000000000\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5159/tickets",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5159",
+              "path": ["tickets"]
+            }
+          }
+        },
+        {
+          "name": "Get All Tickets",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:5159/tickets",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5159",
+              "path": ["tickets"]
+            }
+          }
+        },
+        {
+          "name": "Get Ticket by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:5159/tickets/{{ticketId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5159",
+              "path": ["tickets", "{{ticketId}}"]
+            }
+          }
+        },
+        {
+          "name": "Get QR Code",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:5159/tickets/{{ticketId}}/qrcode",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5159",
+              "path": ["tickets", "{{ticketId}}", "qrcode"]
+            }
+          }
+        },
+        {
+          "name": "Validate Ticket",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ticketId\": \"{{ticketId}}\",\n  \"qrCode\": null\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5159/tickets/validate",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5159",
+              "path": ["tickets", "validate"]
+            }
+          }
+        },
+        {
+          "name": "Confirm Ticket",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "http://localhost:5159/tickets/{{ticketId}}/confirm",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5159",
+              "path": ["tickets", "{{ticketId}}", "confirm"]
+            }
+          }
+        },
+        {
+          "name": "Cancel Ticket",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "http://localhost:5159/tickets/{{ticketId}}/cancel",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5159",
+              "path": ["tickets", "{{ticketId}}", "cancel"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Events",
+      "item": [
+        {
+          "name": "Create Event",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Summer Music Festival 2024\",\n  \"description\": \"A fantastic music festival\",\n  \"startDateUtc\": \"2024-07-15T10:00:00Z\",\n  \"endDateUtc\": \"2024-07-15T22:00:00Z\",\n  \"category\": \"Music\",\n  \"venue\": \"Central Park\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5159/events",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5159",
+              "path": ["events"]
+            }
+          }
+        },
+        {
+          "name": "Get All Events",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:5159/events",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5159",
+              "path": ["events"]
+            }
+          }
+        },
+        {
+          "name": "Get Event by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:5159/events/{{eventId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5159",
+              "path": ["events", "{{eventId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Venues",
+      "item": [
+        {
+          "name": "Get All Venues",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:5159/api/venues",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5159",
+              "path": ["api", "venues"]
+            }
+          }
+        },
+        {
+          "name": "Create Venue",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Central Park\",\n  \"location\": \"New York, NY\",\n  \"capacity\": 10000,\n  \"seatingLayoutId\": null,\n  \"contactInfo\": \"contact@centralpark.com\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5159/api/venues",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5159",
+              "path": ["api", "venues"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Performers",
+      "item": [
+        {
+          "name": "Get All Performers",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:5159/api/Performers",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5159",
+              "path": ["api", "Performers"]
+            }
+          }
+        },
+        {
+          "name": "Create Performer",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"bio\": \"A talented musician\",\n  \"imageUrl\": \"https://example.com/johndoe.jpg\",\n  \"performanceType\": \"Singer\",\n  \"socialLinks\": {\n    \"twitter\": \"https://twitter.com/johndoe\",\n    \"instagram\": \"https://instagram.com/johndoe\"\n  }\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5159/api/Performers",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5159",
+              "path": ["api", "Performers"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5159"
+    },
+    {
+      "key": "ticketId",
+      "value": ""
+    },
+    {
+      "key": "eventId",
+      "value": ""
+    }
+  ]
+}
+

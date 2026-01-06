@@ -7,7 +7,7 @@ public class RegisterUserCommand
     public string Password { get; }
     public RoleType Role { get; }
 
-    public RegisterUserCommand(string email, string password, string role)
+    public RegisterUserCommand(string email, string password, RoleType role)
     {
         Email = email;
         Password = password;
