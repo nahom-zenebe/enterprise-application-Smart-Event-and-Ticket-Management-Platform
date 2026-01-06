@@ -31,11 +31,7 @@ namespace SmartPlatform.Api.Controllers
     [Route("media")]
     public class MediaController : ControllerBase
     {
-        private static readonly List<EventMediaDto> MediaStore = EventMediaController
-            .GetType()
-            .Assembly
-            .GetTypes()
-            .First()
+        private static readonly List<EventMediaDto> MediaStore = typeof(EventMediaController)
             .GetField("MediaStore", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)?
             .GetValue(null) as List<EventMediaDto> ?? new();
 

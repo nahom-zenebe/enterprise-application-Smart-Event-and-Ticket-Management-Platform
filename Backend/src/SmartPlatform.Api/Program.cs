@@ -15,6 +15,7 @@ using Shared.Infrastructure.Payments.Repositories;
 using Shared.Application.Payments.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Stripe;
+using System.Text.Json.Serialization;   // ✅ ADD THIS
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,7 +81,16 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("SellerPolicy", p => p.RequireRole("Seller"));
 });
 
-builder.Services.AddControllers();
+// ✅ THIS IS THE IMPORTANT FIX
+builder.Services
+    .AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(
+            new JsonStringEnumConverter()
+        );
+    });
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -93,8 +103,6 @@ builder.Services.AddDbContext<EventPlanningDbContext>(
 
 builder.Services.AddDbContext<PaymentDbContext>(options =>
     options.UseNpgsql(postgresConnectionString));
-
-// ---------------- REPOSITORY SERVICES ----------------
 
 // ---------------- REPOSITORY SERVICES ----------------
 builder.Services.AddScoped<IEventRepository, EventRepository>();
@@ -137,20 +145,16 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-
 // ---------------- MIDDLEWARE ORDER ----------------
 app.UseAuthentication();
 app.UseAuthorization();
 
-// ---------------- TEST ENDPOINTS ----------------
+// ---------------- ENDPOINTS ----------------
 app.MapControllers();
-
 app.Run();
