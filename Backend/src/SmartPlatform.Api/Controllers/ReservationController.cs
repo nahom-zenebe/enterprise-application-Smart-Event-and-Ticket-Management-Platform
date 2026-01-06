@@ -12,6 +12,11 @@ namespace Ticketing.API.Controllers
     {
         private readonly IReservationService _service;
 
+        public class PaymentRequest
+        {
+            public Guid PaymentId { get; set; }
+        }
+
         public ReservationController(IReservationService service)
         {
             _service = service;
@@ -99,6 +104,35 @@ namespace Ticketing.API.Controllers
             {
                 await _service.AddTicketAsync(id, ticketDto);
                 return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpPost("{id}/payment")]
+        public async Task<IActionResult> ProcessPayment(Guid id, [FromBody] PaymentRequest request)
+        {
+            try
+            {
+                // Process payment and confirm reservation
+                await _service.ProcessPaymentAsync(id, request.PaymentId);
+                return Ok(new { message = "Payment processed and reservation confirmed" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpGet("{id}/total")]
+        public async Task<IActionResult> GetTotal(Guid id)
+        {
+            try
+            {
+                var total = await _service.GetReservationTotalAsync(id);
+                return Ok(new { total });
             }
             catch (Exception ex)
             {

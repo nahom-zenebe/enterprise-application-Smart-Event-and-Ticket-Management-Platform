@@ -17,5 +17,7 @@ namespace Ticketing.Application.Interfaces
         Task ConfirmAsync(Guid id);
         Task CancelAsync(Guid id);
         Task AddTicketAsync(Guid reservationId, TicketDto ticketDto);
+        Task ProcessPaymentAsync(Guid reservationId, Guid paymentId);
+        Task<decimal> GetReservationTotalAsync(Guid reservationId);
     }
 }
