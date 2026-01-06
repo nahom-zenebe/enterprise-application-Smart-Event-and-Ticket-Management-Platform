@@ -36,11 +36,33 @@ namespace Ticketing.Application.Commands
                 DateTime.UtcNow
             );
 
+            // If QR code not provided, generate one based on the ticket ID
+            if (string.IsNullOrWhiteSpace(ticket.QRCode))
+            {
+                var qrCodeData = ticket.TicketID.ToString();
+                using (QRCodeGenerator qrGenerator = new QRCodeGenerator())
+                {
+                    QRCodeData qrData = qrGenerator.CreateQrCode(qrCodeData, QRCodeGenerator.ECCLevel.Q);
+                    using (QRCode qrCode = new QRCode(qrData))
+                    using (Bitmap qrBitmap = qrCode.GetGraphic(20))
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        qrBitmap.Save(ms, ImageFormat.Png);
+                        byte[] imageBytes = ms.ToArray();
+                        string base64String = Convert.ToBase64String(imageBytes);
+                        string qrCodeBase64 = $"data:image/png;base64,{base64String}";
+
+                        ticket.Update(qrCode: qrCodeBase64);
+                    }
+                }
+            }
+
             await _repository.AddAsync(ticket);
             await _repository.SaveChangesAsync();
 
             dto.TicketID = ticket.TicketID;
             dto.Status = ticket.Status;
+            dto.QRCode = ticket.QRCode;
             return dto;
         }
 

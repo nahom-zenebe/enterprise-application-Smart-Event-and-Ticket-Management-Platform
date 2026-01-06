@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Ticketing.Domain.Enums; // <-- Important: Use the enum from Enums folder
 
 namespace Ticketing.Domain.Entities
 {
@@ -12,12 +13,8 @@ namespace Ticketing.Domain.Entities
         CheckedIn
     }
 
-    public enum TicketType
-    {
-        Regular,
-        VIP,
-        Student
-    }
+    // REMOVED: public enum TicketType { ... }
+    // We now exclusively use TicketTypeEnum from Ticketing.Domain.Enums
 
     public class Ticket
     {
@@ -26,7 +23,7 @@ namespace Ticketing.Domain.Entities
         public Guid TicketID { get; set; } = Guid.NewGuid();
 
         [Required]
-        public TicketType Type { get; set; } = TicketType.Regular;
+        public TicketTypeEnum Type { get; set; } = TicketTypeEnum.Standard; // or Regular, VIP, etc.
 
         [Required]
         [Column(TypeName = "decimal(18,2)")]
@@ -51,10 +48,10 @@ namespace Ticketing.Domain.Entities
         // Constructor for manual creation
         public Ticket(
             Guid ticketID,
-            TicketType type,
+            TicketTypeEnum type,
             decimal price,
-            string qrCode,
-            string discountCode,
+            string? qrCode,
+            string? discountCode,
             Guid reservationID,
             TicketStatus status,
             DateTime createdAt,
@@ -72,10 +69,9 @@ namespace Ticketing.Domain.Entities
             UpdatedAt = updatedAt != default ? updatedAt : DateTime.UtcNow;
         }
 
-        // Parameterless constructor for EF
+        // Parameterless constructor required by Entity Framework
         protected Ticket() { }
 
-        // Confirm the ticket
         public void Confirm()
         {
             if (Status != TicketStatus.Reserved)
@@ -85,7 +81,6 @@ namespace Ticketing.Domain.Entities
             UpdatedAt = DateTime.UtcNow;
         }
 
-        // Cancel the ticket
         public void Cancel()
         {
             if (Status == TicketStatus.CheckedIn)
@@ -95,7 +90,6 @@ namespace Ticketing.Domain.Entities
             UpdatedAt = DateTime.UtcNow;
         }
 
-        // Check-in the ticket
         public void CheckIn()
         {
             if (Status != TicketStatus.Confirmed)
@@ -105,9 +99,8 @@ namespace Ticketing.Domain.Entities
             UpdatedAt = DateTime.UtcNow;
         }
 
-        // Update ticket properties
         public void Update(
-            TicketType? type = null,
+            TicketTypeEnum? type = null,
             decimal? price = null,
             string? discountCode = null,
             string? qrCode = null
@@ -119,10 +112,10 @@ namespace Ticketing.Domain.Entities
             if (price.HasValue)
                 Price = price.Value;
 
-            if (!string.IsNullOrWhiteSpace(discountCode))
+            if (discountCode != null) // Covers both null and empty/whitespace
                 DiscountCode = discountCode;
 
-            if (!string.IsNullOrWhiteSpace(qrCode))
+            if (qrCode != null)
                 QRCode = qrCode;
 
             UpdatedAt = DateTime.UtcNow;
