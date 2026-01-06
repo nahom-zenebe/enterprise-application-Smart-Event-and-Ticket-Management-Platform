@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Ticketing.Domain.Common;
+using System.Linq;
 
 namespace Ticketing.Domain.Entities
 {
@@ -12,7 +12,7 @@ namespace Ticketing.Domain.Entities
         Cancelled
     }
 
-    public class Reservation : AggregateRoot
+    public class Reservation
     {
         [Key]
         public Guid Id { get; private set; }

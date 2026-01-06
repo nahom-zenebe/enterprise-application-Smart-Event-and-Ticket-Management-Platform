@@ -10,5 +10,6 @@ namespace Ticketing.Infrastructure.Persistence
 
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<OutboxEvent> OutboxEvents { get; set; }
     }
 }

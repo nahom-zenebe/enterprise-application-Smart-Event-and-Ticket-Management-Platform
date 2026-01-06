@@ -13,11 +13,13 @@ namespace Ticketing.Application.Commands
     {
         private readonly IReservationRepository _repository;
         private readonly ITicketRepository _ticketRepository;
+        private readonly IOutboxService _outboxService;
 
-        public ReservationCommandHandlers(IReservationRepository repository, ITicketRepository ticketRepository)
+        public ReservationCommandHandlers(IReservationRepository repository, ITicketRepository ticketRepository, IOutboxService outboxService)
         {
             _repository = repository;
             _ticketRepository = ticketRepository;
+            _outboxService = outboxService;
         }
 
         public async Task<ReservationDto> CreateAsync(ReservationDto dto)
@@ -25,6 +27,7 @@ namespace Ticketing.Application.Commands
             var reservation = new Reservation(dto.UserId, dto.EventId, dto.ExpiresAt);
 
             await _repository.AddAsync(reservation);
+            await _outboxService.SaveEventAsync("ReservationCreated", new { ReservationId = reservation.Id, UserId = reservation.UserId, EventId = reservation.EventId });
             await _repository.SaveChangesAsync();
 
             return MapToDto(reservation);
@@ -80,6 +83,7 @@ namespace Ticketing.Application.Commands
                 throw new Exception("Reservation not found");
 
             reservation.Confirm();
+            await _outboxService.SaveEventAsync("ReservationConfirmed", new { ReservationId = id, UserId = reservation.UserId });
             await _repository.SaveChangesAsync();
         }
 
@@ -90,6 +94,7 @@ namespace Ticketing.Application.Commands
                 throw new Exception("Reservation not found");
 
             reservation.Cancel();
+            await _outboxService.SaveEventAsync("ReservationCancelled", new { ReservationId = id, UserId = reservation.UserId });
             await _repository.SaveChangesAsync();
         }
 
@@ -114,6 +119,27 @@ namespace Ticketing.Application.Commands
             reservation.AddTicket(ticket);
             await _ticketRepository.AddAsync(ticket);
             await _repository.SaveChangesAsync();
+        }
+
+        public async Task ProcessPaymentAsync(Guid reservationId, Guid paymentId)
+        {
+            var reservation = await _repository.GetByIdAsync(reservationId);
+            if (reservation == null)
+                throw new Exception("Reservation not found");
+
+            // Confirm reservation after successful payment
+            reservation.Confirm();
+            await _outboxService.SaveEventAsync("PaymentProcessed", new { ReservationId = reservationId, PaymentId = paymentId });
+            await _repository.SaveChangesAsync();
+        }
+
+        public async Task<decimal> GetReservationTotalAsync(Guid reservationId)
+        {
+            var reservation = await _repository.GetByIdAsync(reservationId);
+            if (reservation == null)
+                throw new Exception("Reservation not found");
+
+            return reservation.Tickets.Sum(t => t.Price);
         }
 
         private static ReservationDto MapToDto(Reservation reservation)
