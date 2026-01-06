@@ -19,7 +19,10 @@ using Stripe;
 var builder = WebApplication.CreateBuilder(args);
 
 // Get connection string
-var postgresConnectionString = builder.Configuration.GetConnectionString("Postgres");
+var postgresConnectionString = builder.Configuration.GetConnectionString("Postgres") 
+    ?? "Host=localhost;Port=5432;Database=SmartEventPlatformDb;Username=postgres;Password=1904";
+
+Console.WriteLine($"Using connection string: {postgresConnectionString}");
 
 // ---------------- AUTHENTICATION ----------------
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -146,7 +149,7 @@ if (app.Environment.IsDevelopment())
 }
 
 
-// ---------------- MIDDLEWARE ORDER ----------------
+// // ---------------- MIDDLEWARE ORDER ----------------
 app.UseAuthentication();
 app.UseAuthorization();
 

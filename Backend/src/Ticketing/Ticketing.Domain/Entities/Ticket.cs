@@ -32,7 +32,7 @@ namespace Ticketing.Domain.Entities
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
 
-        public string DiscountCode { get; set; } // optional
+        public string? DiscountCode { get; set; } // optional
 
         [Required]
         public TicketStatus Status { get; private set; } = TicketStatus.Reserved;
@@ -40,7 +40,7 @@ namespace Ticketing.Domain.Entities
         [Required]
         public Guid ReservationID { get; set; }
 
-        public string QRCode { get; set; } // could store base64 or barcode string
+        public string? QRCode { get; set; } // could store base64 or barcode string
 
         [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

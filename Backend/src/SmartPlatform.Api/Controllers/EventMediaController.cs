@@ -31,13 +31,7 @@ namespace SmartPlatform.Api.Controllers
     [Route("media")]
     public class MediaController : ControllerBase
     {
-        private static readonly List<EventMediaDto> MediaStore = EventMediaController
-            .GetType()
-            .Assembly
-            .GetTypes()
-            .First()
-            .GetField("MediaStore", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)?
-            .GetValue(null) as List<EventMediaDto> ?? new();
+        private static readonly List<EventMediaDto> MediaStore = new();
 
         [HttpPut("{id}")]
         public IActionResult UpdateMedia(int id, [FromBody] EventMediaDto dto)
