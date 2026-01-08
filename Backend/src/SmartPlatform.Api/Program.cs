@@ -135,8 +135,6 @@ builder.Services.AddScoped<Ticketing.Application.Interfaces.IEventPublisher, Tic
 // ---------------- QUARTZ.NET CONFIGURATION ----------------
 builder.Services.AddQuartz(q =>
 {
-    q.UseMicrosoftDependencyInjection();
-    
     var jobKey = new JobKey("OutboxPublisherJob");
     q.AddJob<Ticketing.Infrastructure.Jobs.OutboxPublisherJob>(opts => opts.WithIdentity(jobKey));
     

@@ -9,10 +9,8 @@ namespace Ticketing.Infrastructure.Persistence
     {
         public TicketingDbContext CreateDbContext(string[] args)
         {
-            // Adjusted path: Navigate up to the solution root and then to the API project
-            // Assuming structure: backend/src/[Projects]
-            // Run 'dotnet ef' from the backend root or adjust levels as needed
-            var basePath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "src", "SmartPlatform.Api"));
+            // Get the path to the SmartPlatform.Api project
+            var basePath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "src", "SmartPlatform.Api"));
 
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(basePath)
@@ -21,7 +19,7 @@ namespace Ticketing.Infrastructure.Persistence
                 .Build();
 
             var connectionString = configuration.GetConnectionString("Postgres")
-                ?? throw new InvalidOperationException("Missing connection string 'Postgres'.");
+                ?? "Host=localhost;Port=5432;Database=SmartEventPlatformDb;Username=postgres;Password=1904";
 
             var optionsBuilder = new DbContextOptionsBuilder<TicketingDbContext>();
             optionsBuilder.UseNpgsql(connectionString);

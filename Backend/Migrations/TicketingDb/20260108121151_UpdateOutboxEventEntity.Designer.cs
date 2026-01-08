@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ticketing.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using Ticketing.Infrastructure.Persistence;
 namespace Backend.Migrations.TicketingDb
 {
     [DbContext(typeof(TicketingDbContext))]
-    partial class TicketingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260108121151_UpdateOutboxEventEntity")]
+    partial class UpdateOutboxEventEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,12 +46,11 @@ namespace Backend.Migrations.TicketingDb
                         .HasColumnType("boolean");
 
                     b.Property<string>("LastError")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("MaxRetries")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(3);
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("NextRetryAt")
                         .HasColumnType("timestamp with time zone");
@@ -57,9 +59,7 @@ namespace Backend.Migrations.TicketingDb
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("RetryCount")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(0);
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
