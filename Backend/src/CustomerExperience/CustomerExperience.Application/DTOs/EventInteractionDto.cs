@@ -24,7 +24,7 @@ namespace CustomerExperience.Application.DTOs
         public string? Metadata { get; set; }
     }
 
-     public class LikeResponseDto
+    public class LikeResponseDto
     {
         public bool Liked { get; set; }
         public string Message { get; set; } = string.Empty;
@@ -32,6 +32,7 @@ namespace CustomerExperience.Application.DTOs
         public int Likes { get; set; }
         public int Dislikes { get; set; }
     }
+
     public class DislikeResponseDto
     {
         public bool Disliked { get; set; }
@@ -39,6 +40,13 @@ namespace CustomerExperience.Application.DTOs
         public InteractionResponseDto? Interaction { get; set; }
         public int Likes { get; set; }
         public int Dislikes { get; set; }
+    }
+
+    public class UserFavoritesResponseDto
+    {
+        public Guid UserId { get; set; }
+        public List<EventInteractionDto> SavedEvents { get; set; } = new List<EventInteractionDto>();
+        public int TotalSaved { get; set; }
     }
 
     public class EventInteractionDto
