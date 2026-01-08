@@ -32,6 +32,15 @@ namespace CustomerExperience.Application.DTOs
         public int Likes { get; set; }
         public int Dislikes { get; set; }
     }
+    public class DislikeResponseDto
+    {
+        public bool Disliked { get; set; }
+        public string Message { get; set; } = string.Empty;
+        public InteractionResponseDto? Interaction { get; set; }
+        public int Likes { get; set; }
+        public int Dislikes { get; set; }
+    }
+
     public class EventInteractionDto
     {
         public Guid InteractionId { get; set; }
