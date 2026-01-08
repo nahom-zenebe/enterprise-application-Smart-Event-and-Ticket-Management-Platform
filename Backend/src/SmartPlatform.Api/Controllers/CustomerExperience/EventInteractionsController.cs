@@ -237,7 +237,76 @@ public IActionResult DebugToken()
             }
         }
 
-       
+        // POST /api/events/{eventId}/save
+        [HttpPost("events/{eventId}/save")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<InteractionResponseDto>> SaveEvent(Guid eventId)
+        {
+            try
+            {
+                var userId = GetCurrentUserId();
+                
+                // Check if already saved
+                var existingSave = await _interactionRepository
+                    .GetUserEventInteractionAsync(userId, eventId, InteractionType.Saved);
+                
+                if (existingSave != null)
+                {
+                    // Already saved - just update timestamp
+                    existingSave.Timestamp = DateTime.UtcNow;
+                    await _interactionRepository.CreateAsync(existingSave);
+                    
+                    _logger.LogInformation("User {UserId} updated save timestamp for event {EventId}", userId, eventId);
+                    
+                    return Ok(new InteractionResponseDto
+                    {
+                        Id = existingSave.Id,
+                        UserId = existingSave.UserId,
+                        EventId = existingSave.EventId,
+                        InteractionType = existingSave.InteractionType,
+                        Timestamp = existingSave.Timestamp,
+                        Metadata = existingSave.Metadata
+                    });
+                }
+                
+                var interaction = new EventInteraction
+                {
+                    Id = Guid.NewGuid(),
+                    UserId = userId,
+                    EventId = eventId,
+                    InteractionType = InteractionType.Saved,
+                    Timestamp = DateTime.UtcNow,
+                    UserAgent = Request.Headers["User-Agent"].ToString(),
+                    IpAddress = HttpContext.Connection.RemoteIpAddress?.ToString()
+                };
+
+                var createdInteraction = await _interactionRepository.CreateAsync(interaction);
+                
+                _logger.LogInformation("User {UserId} saved event {EventId}", userId, eventId);
+                
+                return Ok(new InteractionResponseDto
+                {
+                    Id = createdInteraction.Id,
+                    UserId = createdInteraction.UserId,
+                    EventId = createdInteraction.EventId,
+                    InteractionType = createdInteraction.InteractionType,
+                    Timestamp = createdInteraction.Timestamp,
+                    Metadata = createdInteraction.Metadata
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error saving event {EventId}", eventId);
+                return StatusCode(500, new { 
+                    message = "An error occurred while saving the event",
+                    error = ex.Message 
+                });
+            }
+        }
+
+
         // GET /api/events/{eventId}/interactions/stats
         [HttpGet("events/{eventId}/interactions/stats")]
         [AllowAnonymous]
