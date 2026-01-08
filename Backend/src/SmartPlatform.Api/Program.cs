@@ -20,7 +20,7 @@ using CustomerExperience.Infrastructure.Persistence;
 using CustomerExperience.Application.Interfaces;
 using CustomerExperience.Infrastructure.Repositories;
 using CustomerExperience.Application.Commands;
-  // ✅ ADD THIS
+using Quartz;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -132,6 +132,27 @@ builder.Services.AddScoped<ITicketService, TicketCommandHandlers>();
 builder.Services.AddScoped<Ticketing.Application.Interfaces.IOutboxService, Ticketing.Infrastructure.Services.OutboxService>();
 builder.Services.AddScoped<Ticketing.Application.Interfaces.IEventPublisher, Ticketing.Infrastructure.Services.RabbitMQEventPublisher>();
 
+// ---------------- QUARTZ.NET CONFIGURATION ----------------
+builder.Services.AddQuartz(q =>
+{
+    q.UseMicrosoftDependencyInjection();
+    
+    var jobKey = new JobKey("OutboxPublisherJob");
+    q.AddJob<Ticketing.Infrastructure.Jobs.OutboxPublisherJob>(opts => opts.WithIdentity(jobKey));
+    
+    q.AddTrigger(opts => opts
+        .ForJob(jobKey)
+        .WithIdentity("OutboxPublisherJob-trigger")
+        .WithSimpleSchedule(x => x
+            .WithIntervalInSeconds(30)
+            .RepeatForever()));
+});
+
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
+
+// ---------------- BACKGROUND SERVICES ----------------
+builder.Services.AddHostedService<Ticketing.Infrastructure.Services.EventSubscriberService>();
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -168,6 +189,13 @@ if (app.Environment.IsDevelopment())
 // // ---------------- MIDDLEWARE ORDER ----------------
 app.UseAuthentication();
 app.UseAuthorization();
+
+// ---------------- TEST OUTBOX ENDPOINT ----------------
+app.MapPost("/test/outbox", async (Ticketing.Application.Interfaces.IOutboxService outboxService) =>
+{
+    await outboxService.SaveEventAsync("TestEvent", new { Message = "Test outbox event", Timestamp = DateTime.UtcNow });
+    return Results.Ok("Test event added to outbox");
+});
 
 // ---------------- ENDPOINTS ----------------
 app.MapControllers();

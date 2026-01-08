@@ -10,5 +10,7 @@ namespace Ticketing.Application.Interfaces
         Task SaveEventAsync(string eventType, object eventData);
         Task<IEnumerable<OutboxEvent>> GetUnprocessedEventsAsync();
         Task MarkAsProcessedAsync(Guid eventId);
+        Task MarkAsFailedAsync(Guid eventId, string error);
+        Task<IEnumerable<OutboxEvent>> GetRetryableEventsAsync();
     }
 }

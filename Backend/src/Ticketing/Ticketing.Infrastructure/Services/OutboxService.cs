@@ -41,6 +41,16 @@ namespace Ticketing.Infrastructure.Services
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<OutboxEvent>> GetRetryableEventsAsync()
+        {
+            return await _context.OutboxEvents
+                .Where(e => !e.IsProcessed && 
+                           e.RetryCount < e.MaxRetries && 
+                           (e.NextRetryAt == null || e.NextRetryAt <= DateTime.UtcNow))
+                .OrderBy(e => e.CreatedAt)
+                .ToListAsync();
+        }
+
         public async Task MarkAsProcessedAsync(Guid eventId)
         {
             var outboxEvent = await _context.OutboxEvents.FindAsync(eventId);
@@ -48,6 +58,18 @@ namespace Ticketing.Infrastructure.Services
             {
                 outboxEvent.IsProcessed = true;
                 outboxEvent.ProcessedAt = DateTime.UtcNow;
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task MarkAsFailedAsync(Guid eventId, string error)
+        {
+            var outboxEvent = await _context.OutboxEvents.FindAsync(eventId);
+            if (outboxEvent != null)
+            {
+                outboxEvent.RetryCount++;
+                outboxEvent.LastError = error;
+                outboxEvent.NextRetryAt = DateTime.UtcNow.AddMinutes(Math.Pow(2, outboxEvent.RetryCount));
                 await _context.SaveChangesAsync();
             }
         }

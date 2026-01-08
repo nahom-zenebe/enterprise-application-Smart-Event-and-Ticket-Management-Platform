@@ -12,5 +12,9 @@ namespace Ticketing.Domain.Entities
         public DateTime CreatedAt { get; set; }
         public DateTime? ProcessedAt { get; set; }
         public bool IsProcessed { get; set; }
+        public int RetryCount { get; set; } = 0;
+        public int MaxRetries { get; set; } = 3;
+        public DateTime? NextRetryAt { get; set; }
+        public string LastError { get; set; }
     }
 }
