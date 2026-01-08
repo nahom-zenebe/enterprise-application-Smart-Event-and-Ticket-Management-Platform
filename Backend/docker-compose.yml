@@ -21,8 +21,8 @@ services:
     container_name: ticketing-rabbitmq
     restart: unless-stopped
     ports:
-      - "5672:5672"     # AMQP
-      - "15672:15672"   # Management UI
+      - "5672:5672"     
+      - "15672:15672"   
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
@@ -30,27 +30,20 @@ services:
       - ticketing-network
 
   keycloak:
-    image: quay.io/keycloak/keycloak:25.0.2
+    image: quay.io/keycloak/keycloak:24.0.1
     container_name: ticketing-keycloak
     restart: unless-stopped
     command: start-dev
     environment:
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
-      KC_DB_USERNAME: ticketing_user
-      KC_DB_PASSWORD: ticketing_pass
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
-    ports:
-      - "8080:8080"
-    depends_on:
-      - postgres
-    networks:
-      - ticketing-network
-
-volumes:
-  postgres_data:
-
+  KC_DB_USERNAME: ticketing_user
+  KC_DB_PASSWORD: ticketing_pass
+  KEYCLOAK_ADMIN: admin
+  KEYCLOAK_ADMIN_PASSWORD: admin
+ports:
+  - "8080:8080"
+depends_on:
+  - postgres
 networks:
-  ticketing-network:
-    driver: bridge
+  - ticketing-network
