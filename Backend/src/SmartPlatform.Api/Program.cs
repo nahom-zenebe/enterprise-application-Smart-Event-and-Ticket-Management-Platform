@@ -16,6 +16,10 @@ using Shared.Application.Payments.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Stripe;
 using System.Text.Json.Serialization;   // ✅ ADD THIS
+using CustomerExperience.Infrastructure.Persistence;
+using CustomerExperience.Application.Interfaces;
+using CustomerExperience.Infrastructure.Repositories;
+using CustomerExperience.Application.Commands;
 
 var builder = WebApplication.CreateBuilder(args);
 
