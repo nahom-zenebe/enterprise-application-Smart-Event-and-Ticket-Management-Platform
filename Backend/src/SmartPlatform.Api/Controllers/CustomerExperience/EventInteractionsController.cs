@@ -305,6 +305,39 @@ public IActionResult DebugToken()
                 });
             }
         }
+        // DELETE /api/events/{eventId}/save
+        [HttpDelete("events/{eventId}/save")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> UnsaveEvent(Guid eventId)
+        {
+            try
+            {
+                var userId = GetCurrentUserId();
+                
+                var removed = await _interactionRepository.RemoveInteractionAsync(
+                    userId, eventId, InteractionType.Saved);
+                
+                if (!removed)
+                {
+                    return NotFound(new { message = "Event not found in saved list" });
+                }
+                
+                _logger.LogInformation("User {UserId} unsaved event {EventId}", userId, eventId);
+                
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error unsaving event {EventId}", eventId);
+                return StatusCode(500, new { 
+                    message = "An error occurred while unsaving the event",
+                    error = ex.Message 
+                });
+            }
+        }
+
 
 
         // GET /api/events/{eventId}/interactions/stats
