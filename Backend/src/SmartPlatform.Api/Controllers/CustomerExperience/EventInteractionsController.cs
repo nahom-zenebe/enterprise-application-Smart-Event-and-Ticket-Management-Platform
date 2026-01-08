@@ -1,4 +1,3 @@
-//EventInteractionsController.cs
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -305,6 +304,7 @@ public IActionResult DebugToken()
                 });
             }
         }
+
         // DELETE /api/events/{eventId}/save
         [HttpDelete("events/{eventId}/save")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -338,7 +338,57 @@ public IActionResult DebugToken()
             }
         }
 
-
+        // GET /api/users/{userId}/favorites
+        [HttpGet("users/{userId}/favorites")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<UserFavoritesResponseDto>> GetUserFavorites(Guid userId)
+        {
+            try
+            {
+                var currentUserId = GetCurrentUserId();
+                
+                // Users can only view their own favorites (or admin can view any)
+                if (currentUserId != userId && !User.IsInRole("Admin"))
+                {
+                    return Forbid();
+                }
+                
+                var savedEvents = await _interactionRepository.GetUserSavedEventsAsync(userId);
+                
+                // Note: You'll need to fetch event details from Event service
+                var eventDtos = savedEvents.Select(interaction => new EventInteractionDto
+                {
+                    InteractionId = interaction.Id,
+                    EventId = interaction.EventId,
+                    EventTitle = "Event Title Here", // Fetch from Event service
+                    EventDate = DateTime.UtcNow, // Fetch from Event service
+                    EventImage = "https://example.com/image.jpg", // Fetch from Event service
+                    InteractionTime = interaction.Timestamp
+                }).ToList();
+                
+                var response = new UserFavoritesResponseDto
+                {
+                    UserId = userId,
+                    SavedEvents = eventDtos,
+                    TotalSaved = eventDtos.Count
+                };
+                
+                _logger.LogInformation("Retrieved {Count} saved events for user {UserId}", 
+                    eventDtos.Count, userId);
+                
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting favorites for user {UserId}", userId);
+                return StatusCode(500, new { 
+                    message = "An error occurred while retrieving favorites",
+                    error = ex.Message 
+                });
+            }
+        }
 
         // GET /api/events/{eventId}/interactions/stats
         [HttpGet("events/{eventId}/interactions/stats")]
