@@ -116,6 +116,8 @@ builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<ISessionRepository, SessionRepository>();
 builder.Services.AddScoped<IVenueRepository, VenueRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<IEventInteractionRepository, EventInteractionRepository>(); 
+
 
 // ---------------- TICKETING SERVICES ----------------
 builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
