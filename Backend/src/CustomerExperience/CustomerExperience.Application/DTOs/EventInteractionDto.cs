@@ -24,7 +24,14 @@ namespace CustomerExperience.Application.DTOs
         public string? Metadata { get; set; }
     }
 
-    
+     public class LikeResponseDto
+    {
+        public bool Liked { get; set; }
+        public string Message { get; set; } = string.Empty;
+        public InteractionResponseDto? Interaction { get; set; }
+        public int Likes { get; set; }
+        public int Dislikes { get; set; }
+    }
     public class EventInteractionDto
     {
         public Guid InteractionId { get; set; }
