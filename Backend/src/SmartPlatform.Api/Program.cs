@@ -15,11 +15,12 @@ using Shared.Infrastructure.Payments.Repositories;
 using Shared.Application.Payments.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Stripe;
-using System.Text.Json.Serialization;   // ✅ ADD THIS
+using System.Text.Json.Serialization; 
 using CustomerExperience.Infrastructure.Persistence;
 using CustomerExperience.Application.Interfaces;
 using CustomerExperience.Infrastructure.Repositories;
 using CustomerExperience.Application.Commands;
+  // ✅ ADD THIS
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -104,20 +105,24 @@ builder.Services.AddSwaggerGen();
 // ---------------- DATABASE CONTEXTS ----------------
 builder.Services.AddDbContext<TicketingDbContext>(options =>
     options.UseNpgsql(postgresConnectionString));
+    // In Program.cs
+builder.Services.AddScoped<IEventInteractionRepository, EventInteractionRepository>();
+
+// Make sure DbContext is registered
 
 builder.Services.AddDbContext<EventPlanningDbContext>(
     options => options.UseNpgsql(postgresConnectionString));
 
 builder.Services.AddDbContext<PaymentDbContext>(options =>
     options.UseNpgsql(postgresConnectionString));
-
+builder.Services.AddDbContext<CustomerExperienceDbContext>(options =>
+    options.UseNpgsql(postgresConnectionString));
 // ---------------- REPOSITORY SERVICES ----------------
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<ISessionRepository, SessionRepository>();
 builder.Services.AddScoped<IVenueRepository, VenueRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IEventInteractionRepository, EventInteractionRepository>(); 
-
 
 // ---------------- TICKETING SERVICES ----------------
 builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
